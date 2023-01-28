@@ -1,0 +1,124 @@
+{
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "node":true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "ignorePatterns": [
+    "dist/**",
+    "rollup.config.js"
+  ],
+  "rules": {
+    "no-case-declarations": "off",
+    "no-unused-vars": "off",
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 2,
+        "maxEOF": 0,
+        "maxBOF": 0
+      }
+    ],
+    "no-extra-semi": "error",
+    "no-useless-constructor": "warn",
+    "no-useless-return": "warn",
+    "no-unneeded-ternary": "warn",
+    "no-whitespace-before-property": "warn",
+    "no-multi-spaces": "warn",
+    "import/no-anonymous-default-export": "off",
+    "no-empty": [
+      "warn",
+      {
+        "allowEmptyCatch": true
+      }
+    ],
+    "no-trailing-spaces": [
+      "warn",
+      {
+        "skipBlankLines": true
+      }
+    ],
+    "padded-blocks": [
+      "warn",
+      "never"
+    ],
+    "arrow-spacing": "warn",
+    "prefer-const": "warn",
+    "prefer-exponentiation-operator": "warn",
+    "semi": "warn",
+    "comma-dangle": "warn",
+    "comma-spacing": [
+      "warn",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "comma-style": [
+      "warn",
+      "last"
+    ],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "key-spacing": [
+      "warn",
+      {
+        "afterColon": true
+      }
+    ],
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "space-in-parens": [
+      "warn",
+      "never"
+    ],
+    "spaced-comment": [
+      "warn",
+      "always",
+      {
+        "markers": [
+          "/"
+        ]
+      }
+    ],
+    "space-infix-ops": "warn",
+    "indent": [
+      "warn",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "curly": [
+      "warn",
+      "all"
+    ],
+    "quotes": [
+      "warn",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ],
+    "lines-around-directive": [
+      "warn",
+      "always"
+    ]
+  }
+}
