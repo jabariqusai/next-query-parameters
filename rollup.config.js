@@ -15,11 +15,13 @@ export default [
       {
         file: packageJson.main,
         format: 'cjs',
-        name: 'react-ts-lib'
+        name: 'react-ts-lib',
+				sourcemap: true
       },
       {
         file: packageJson.module,
-        format: 'esm'
+        format: 'esm',
+				sourcemap: true
       }
     ],
     plugins: [
