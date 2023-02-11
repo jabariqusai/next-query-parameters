@@ -43,9 +43,11 @@ const useParams = <P extends object>(template: NextQueryParams.Template<P>, conf
 				if (param instanceof NextQueryParams.ArrayParam) {
 					newUrlParams.delete(key);
 
-					const encoded = param.encode(value as []);
+					if (value !== undefined && value !== null) {
+						const encoded = param.encode(value as []);
 
-					encoded.forEach(item => newUrlParams.append(key, item));
+						encoded.forEach(item => newUrlParams.append(key, item));
+					}
 				} else {
 					const encoded = param.encode(value as P[keyof P]);
 
