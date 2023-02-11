@@ -36,7 +36,7 @@ export namespace NextQueryParams {
 	 * Defines a template for the params hook based on your parameters object.
 	 */
 	export type Template<T extends object> = {
-		[K in keyof T]: Param<T[K]>;
+		[K in keyof T]: T[K] extends Array<infer SubType> ? ArrayParam<SubType> | Param<T[K]> : Param<T[K]>;
 	};
 
 	export namespace Setter {

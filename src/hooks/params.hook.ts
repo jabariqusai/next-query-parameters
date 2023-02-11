@@ -16,7 +16,7 @@ interface IConfig {
 
 const useParams = <P extends object>(template: NextQueryParams.Template<P>, config?: Partial<IConfig>) => {
 	const router = useRouter();
-	const beforeHash = router.asPath.split('#')[0];
+	const [beforeHash, afterHash] = router.asPath.split('#');
 	const pathname = beforeHash.split('?')[0] || '';
 	const queryString = beforeHash.split('?')[1] || '';
 	const triggerRef = useRef<NextQueryParams.Setter.ITrigger | undefined>();
@@ -38,12 +38,22 @@ const useParams = <P extends object>(template: NextQueryParams.Template<P>, conf
 
 		Object.entries(params).forEach(([key, value]) => {
 			if (template[key as keyof P]) {
-				const param = template[key as keyof P].encode(value as P[keyof P]);
+				const param = template[key as keyof P];
 
-				if (param === undefined || param === null) {
+				if (param instanceof NextQueryParams.ArrayParam) {
 					newUrlParams.delete(key);
+
+					const encoded = param.encode(value as []);
+
+					encoded.forEach(item => newUrlParams.append(key, item));
 				} else {
-					newUrlParams.set(key, param);
+					const encoded = param.encode(value as P[keyof P]);
+
+					if (encoded === undefined || encoded === null) {
+						newUrlParams.delete(key);
+					} else {
+						newUrlParams.set(key, encoded);
+					}
 				}
 			}
 		});
@@ -51,27 +61,33 @@ const useParams = <P extends object>(template: NextQueryParams.Template<P>, conf
 		const queryString = newUrlParams.toString();
 
 		if (mode === 'replace') {
-			router.replace({ pathname, query: queryString }, undefined, { shallow });
+			router.replace({ pathname, query: queryString, hash: afterHash }, undefined, { shallow });
 		} else {
-			router.push({ pathname, query: queryString }, undefined, { shallow });
+			router.push({ pathname, query: queryString, hash: afterHash }, undefined, { shallow });
 		}
 
 		return queryString;
-	}, [urlParams]);
+	}, [urlParams, afterHash]);
 
 	const dependencies = useMemo(() => Object.keys(template).map(key => urlParams.get(key)), [urlParams]);
 
 	const [params, trigger] = useMemo(() => {
 		type Template = NextQueryParams.Template<P>;
-		const params = (Object.entries(template) as Array<[keyof Template, Template[keyof Template]]>).reduce<Partial<P>>((params, [key, param]) => {
-			const value = param.decode(urlParams.get(key as string) as string);
 
-			if (value !== undefined && value !== null) {
-				params[key] = value;
-			}
+		const params = (Object.entries(template) as Array<[keyof Template, Template[keyof Template]]>)
+			.reduce<Partial<P>>((params, [key, param]) => {
+				if (param instanceof NextQueryParams.ArrayParam) {
+					params[key] = param.decode(urlParams.getAll(key as string)) as any as P[keyof P];
+				} else {
+					const value = urlParams.get(key as string);
 
-			return params;
-		}, {});
+					if (value !== undefined && value !== null) {
+						params[key] = param.decode(value) as any as P[keyof P];
+					}
+				}
+
+				return params;
+			}, {});
 
 		const trigger = triggerRef.current;
 
