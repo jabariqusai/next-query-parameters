@@ -1,6 +1,6 @@
 {
 	"name": "next-query-parameters",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Read & set query string parameters easily inside your Next application",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
